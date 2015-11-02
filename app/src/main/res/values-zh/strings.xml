@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">mCalendar</string>
+    <string name="Apr">四月</string>
+    <string name="Aug">八月</string>
+    <string name="Dec">十二月</string>
+    <string name="Feb">二月</string>
+    <string name="Jan">一月</string>
+    <string name="Jul">七月</string>
+    <string name="Jun">六月</string>
+    <string name="Mar">三月</string>
+    <string name="May">五月</string>
+    <string name="Nov">十一月</string>
+    <string name="Oct">十月</string>
+    <string name="Sep">九月</string>
+    <string name="action_settings">设置</string>
+    <string name="title_activity_new_task">新任务</string>
+</resources>

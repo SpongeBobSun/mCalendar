@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
+    android:layout_gravity="bottom"
+    android:paddingLeft="16dp">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/id_task_title_text"
+        android:text="Task Title"
+        android:background="@null"
+        android:textSize="20dp"
+        android:layout_marginBottom="16dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:textSize="10dp"
+        android:text="Start at:" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:id="@+id/id_task_title_start">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:id="@+id/id_task_title_date_start"
+            android:textSize="20dp"
+            android:textColor="#000"
+            android:text="2015-10-22"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:id="@+id/id_task_title_time_start"
+            android:textSize="20dp"
+            android:gravity="end"
+            android:textColor="#000"
+            android:text="16:30"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:textSize="10dp"
+        android:text="End at:" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:id="@+id/id_task_title_end">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:id="@+id/id_task_title_date_end"
+            android:textSize="20dp"
+            android:textColor="#000"
+            android:text="2015-10-22"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:id="@+id/id_task_title_time_end"
+            android:textSize="20dp"
+            android:gravity="end"
+            android:textColor="#000"
+            android:text="16:30"/>
+    </LinearLayout>
+</LinearLayout>
