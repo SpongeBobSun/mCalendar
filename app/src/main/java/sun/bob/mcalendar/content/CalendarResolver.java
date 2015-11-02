@@ -163,7 +163,7 @@ public class CalendarResolver {
 
     public ArrayList<ArrayList<TaskBean>> getAllTasksGroupByDay(){
         ArrayList<ArrayList<TaskBean>> ret = new ArrayList<>();
-        if (allTasks.size() == 0 || allTasks == null){
+        if (allTasks == null|| allTasks.size() == 0){
             return ret;
         }
         TaskBean last = allTasks.get(0);
