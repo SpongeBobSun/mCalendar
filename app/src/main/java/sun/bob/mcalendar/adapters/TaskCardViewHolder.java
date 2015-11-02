@@ -15,35 +15,22 @@ import sun.bob.mcalendarview.vo.DateData;
  */
 public class TaskCardViewHolder extends RecyclerView.ViewHolder {
 
-    TextView day, month, title, detail, start, end;
+    TextView title, detail, start, end;
 
-    public TaskCardViewHolder(View itemView, boolean singleDay) {
+    public TaskCardViewHolder(View itemView) {
         super(itemView);
         title = (TextView) itemView.findViewById(R.id.id_card_task_title);
         detail = (TextView) itemView.findViewById(R.id.id_card_task_detail);
         start = (TextView) itemView.findViewById(R.id.id_task_card_start);
         end = (TextView) itemView.findViewById(R.id.id_task_card_end);
-        day = (TextView) itemView.findViewById(R.id.id_task_card_day);
-        month = (TextView) itemView.findViewById(R.id.id_task_card_month);
     }
 
     public TaskCardViewHolder populateWithDateData(DateData dateData){
-        this.setDay(dateData.getDay())
-                .setMonth(dateData.getMonth())
-                .setStart(String.format("%s:%s", dateData.getHourString(), dateData.getMinuteString()));
+        this.setStart(String.format("%s:%s", dateData.getHourString(), dateData.getMinuteString()));
         return this;
     }
 
 
-    public TaskCardViewHolder setDay(int day) {
-        this.day.setText(String.format("%d", day));
-        return this;
-    }
-
-    public TaskCardViewHolder setMonth(int month) {
-        this.month.setText(String.format("%d", month));
-        return this;
-    }
 
     public TaskCardViewHolder setTitle(String title) {
         this.title.setText(title);

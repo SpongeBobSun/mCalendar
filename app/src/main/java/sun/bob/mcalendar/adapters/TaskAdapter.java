@@ -22,38 +22,25 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskCardViewHolder> {
 
     private ArrayList<TaskBean> tasks;
     private Context context;
-    private boolean singleDay;
-
-    public TaskAdapter(Context context){
-        this.context = context;
-        tasks = CalendarResolver.getStaticInstance(context).refreshAllEvents();
-        singleDay = false;
-    }
 
     public TaskAdapter(Context context, DateData date){
         this.context = context;
         tasks = CalendarResolver.getStaticInstance(context).getEventsOn(date);
-        singleDay = true;
     }
 
     public TaskAdapter changeDate(DateData dateData){
         tasks = CalendarResolver.getStaticInstance(context).getEventsOn(dateData);
         notifyDataSetChanged();
-        singleDay = true;
         return this;
     }
 
     @Override
     public TaskCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        if (singleDay) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_small_task_card, parent, false);
-        } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_task_card, parent, false);
-        }
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_small_task_card, parent, false);
         view.setOnClickListener(new OnTaskClickListener((RecyclerView) parent));
         //Pass the inflated view to viewholder so it can populate it's holders.
-        return new TaskCardViewHolder(view, singleDay);
+        return new TaskCardViewHolder(view);
     }
 
     @Override
