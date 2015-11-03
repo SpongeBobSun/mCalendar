@@ -8,6 +8,7 @@ import android.provider.CalendarContract;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -150,6 +151,50 @@ public class CalendarResolver {
                             toAdd,
                             dateData,
                             TimeStampUtil.toDateData(nextTS)
+                    ));
+                } else {
+                    ret.add(toAdd);
+                }
+            }
+        }
+        cursor.close();
+        Collections.sort(ret);
+        return ret;
+    }
+
+    public ArrayList<TaskBean> getEventsByMonth(int year, int month){
+        ArrayList<TaskBean> ret = new ArrayList<>();
+        Long start = Long.parseLong(TimeStampUtil.toUnixTimeStamp(new DateData(year, month, 1)));
+        Calendar tmp = Calendar.getInstance();
+        tmp.set(year, month - 1, 1);
+        tmp.set(year, month - 1, tmp.getMaximum(Calendar.DAY_OF_MONTH));
+        Long end = tmp.getTimeInMillis();
+        end += 86400000;
+        Cursor cursor = contentResolver.query(EVENTS_URI,
+                EVENTS_FIELDS,
+                new StringBuilder().append(CalendarContract.Events.DTSTART).append(">=? AND ").append(CalendarContract.Events.DTEND).append("<?").append(" AND ( ").append(CalendarContract.Events.RRULE).append(" IS NULL OR ").append(CalendarContract.Events.RRULE).append(" ='' )").toString(),
+                new String[]{start.toString(), end.toString()},
+                null);
+        if (cursor.getCount() > 0){
+            while (cursor.moveToNext()){
+                ret.add(new TaskBean().populate(cursor));
+            }
+        }
+        cursor.close();
+        cursor = contentResolver.query(EVENTS_URI,
+                EVENTS_FIELDS,
+                CalendarContract.Events.RRULE + "!= ''",
+                null,
+                null);
+        TaskBean toAdd;
+        if (cursor.getCount() > 0){
+            while (cursor.moveToNext()){
+                toAdd = new TaskBean().populate(cursor);
+                if (toAdd.getrRule() != null){
+                    ret.addAll(RecurrenceUtil.getAllRecurrence(
+                            toAdd,
+                            TimeStampUtil.toDateData(start),
+                            TimeStampUtil.toDateData(end)
                     ));
                 } else {
                     ret.add(toAdd);

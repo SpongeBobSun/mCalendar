@@ -36,7 +36,7 @@ public class MarkedDates {
         return data;
     }
 
-    public MarkedDates removeAdd(){
+    public MarkedDates removeAll(){
         data.clear();
         return this;
     }

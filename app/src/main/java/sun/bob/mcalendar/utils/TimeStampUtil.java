@@ -41,4 +41,24 @@ public class TimeStampUtil {
         ret.setMinute(calendar.get(Calendar.MINUTE));
         return ret;
     }
+
+    public static DateData getLastMonth(int year, int month){
+        if (month == 1){
+            month = 12;
+            year -= 1;
+        } else {
+            month -= 1;
+        }
+        return new DateData(year, month, 1);
+    }
+
+    public static DateData getNextMonth(int year, int month){
+        if (month == 12){
+            month = 1;
+            year += 1;
+        } else {
+            month += 1;
+        }
+        return new DateData(year, month, 1);
+    }
 }

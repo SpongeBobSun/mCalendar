@@ -1,5 +1,6 @@
 package sun.bob.mcalendar.adapters;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,10 +35,23 @@ public class DayCardViewHolder extends RecyclerView.ViewHolder {
             ((TextView) toAdd.findViewById(R.id.id_card_task_detail)).setText(task.getDescription());
             ((TextView) toAdd.findViewById(R.id.id_task_card_start)).setText(new StringBuilder().append(task.getStartDate().getHourString()).append(":").append(task.getStartDate().getMinuteString()).toString());
             ((TextView) toAdd.findViewById(R.id.id_task_card_end)).setText(new StringBuilder().append(task.getEndDate().getHourString()).append(":").append(task.getEndDate().getMinuteString()).toString());
+            toAdd.setOnClickListener(new OnTaskClickedListener(task.getId()));
             container.addView(toAdd);
         }
         day.setText(tasks.get(0).getStartDate().getDayString());
         month.setText(Constants.MONTH_TEXT[tasks.get(0).getStartDate().getMonth()]);
         return this;
+    }
+
+    class OnTaskClickedListener implements View.OnClickListener{
+        String id;
+        public OnTaskClickedListener(String id){
+            this.id = id;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Snackbar.make(v, "Event Id: " + id, Snackbar.LENGTH_LONG).show();
+        }
     }
 }

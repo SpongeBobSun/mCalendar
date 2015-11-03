@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import sun.bob.mcalendar.App;
 import sun.bob.mcalendar.R;
+import sun.bob.mcalendar.beans.TaskBean;
 import sun.bob.mcalendar.content.CalendarResolver;
 import sun.bob.mcalendar.fragments.FragmentCalendar;
 import sun.bob.mcalendar.fragments.FragmentSetting;
@@ -98,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
     private void populateCalendar(){
 //        new CalendarResolver(this).getAllEvents();
 //        new CalendarResolver(this).getEventsOn(CurrentCalendar.getCurrentDateData());
+        for(TaskBean taskBean : CalendarResolver.getStaticInstance(this).getAllEvents()){
+            MarkedDates.getInstance().add(taskBean.getStartDate());
+        }
     }
 
     private void changeStatusBarColor(){
