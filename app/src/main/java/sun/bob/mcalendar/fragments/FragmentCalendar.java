@@ -56,9 +56,6 @@ public class FragmentCalendar extends Fragment {
         @Override
         public void onMonthChange(int year, int month) {
             ((MainActivity) getActivity()).toolbar.setTitle(new StringBuilder().append("").append(year).append(" - ").append(month).toString());
-//            for(TaskBean taskBean : CalendarResolver.getStaticInstance(getActivity()).getEventsByMonth(year, month)){
-//                MarkedDates.getInstance().add(taskBean.getStartDate());
-//            }
         }
     }
     class DateClickListener extends OnDateClickListener{

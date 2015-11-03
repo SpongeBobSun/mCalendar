@@ -22,7 +22,6 @@ public class TaskBean implements Comparable {
     String exDate;
     String exRule;
 
-    // TODO: 15/10/23 Add unix timestamp conversion.
     public TaskBean(){
 
     }
@@ -67,12 +66,24 @@ public class TaskBean implements Comparable {
         return Long.parseLong(startDate);
     }
 
+    public String getStartDateString(){
+        return startDate;
+    }
+
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
     public DateData getEndDate() {
         return TimeStampUtil.toDateData(endDate);
+    }
+
+    public String getEndDateString(){
+        return endDate;
+    }
+
+    public Long getEndDateLong(){
+        return Long.parseLong(endDate);
     }
 
     public void setEndDate(String endDate) {

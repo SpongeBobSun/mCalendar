@@ -97,8 +97,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void populateCalendar(){
-//        new CalendarResolver(this).getAllEvents();
-//        new CalendarResolver(this).getEventsOn(CurrentCalendar.getCurrentDateData());
         for(TaskBean taskBean : CalendarResolver.getStaticInstance(this).getAllEvents()){
             MarkedDates.getInstance().add(taskBean.getStartDate());
         }

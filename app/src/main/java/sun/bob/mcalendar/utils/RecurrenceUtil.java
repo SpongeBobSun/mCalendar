@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import sun.bob.mcalendar.beans.TaskBean;
+import sun.bob.mcalendar.constants.Constants;
 import sun.bob.mcalendarview.vo.DateData;
 
 /**
@@ -54,5 +55,25 @@ public class RecurrenceUtil {
             ret.add(toAdd);
         }
         return ret;
+    }
+
+    public static TaskBean populateRRule(TaskBean taskBean, int which){
+        switch (which){
+            case Constants.RRULE_DAILY:
+                taskBean.setrRule("FREQ=DAILY");
+                break;
+            case Constants.RRULE_WEEKLY:
+                taskBean.setrRule("FREQ=WEEKLY");
+                break;
+            case Constants.RRULE_MONTHLY:
+                taskBean.setrRule("FREQ=MONTHLY");
+                break;
+            case Constants.RRULE_YEARLY:
+                taskBean.setrRule("FREQ=YEARLY");
+                break;
+            default:
+                taskBean.setrRule("");
+        }
+        return taskBean;
     }
 }

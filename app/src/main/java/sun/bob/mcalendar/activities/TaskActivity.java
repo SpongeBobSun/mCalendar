@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -18,6 +19,10 @@ import java.util.Calendar;
 
 import sun.bob.mcalendar.R;
 import sun.bob.mcalendar.adapters.DropdownAdapter;
+import sun.bob.mcalendar.beans.TaskBean;
+import sun.bob.mcalendar.content.CalendarProvider;
+import sun.bob.mcalendar.utils.RecurrenceUtil;
+import sun.bob.mcalendar.utils.TimeStampUtil;
 import sun.bob.mcalendarview.utils.CurrentCalendar;
 import sun.bob.mcalendarview.vo.DateData;
 
@@ -28,8 +33,9 @@ public class TaskActivity extends AppCompatActivity {
     public static final int SPINNER_REPEAT = 3;
     public static final int SPINNER_REMINDER = 4;
     int year, month, day;
-    DateData dateStart;
-    DateData dateEnd;
+    public DateData dateStart, dateEnd;
+    private EditText title, description;
+    private Spinner repetition, reminder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +53,11 @@ public class TaskActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 15/10/29 Save event
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                TaskBean taskBean = genTask();
+                if (taskBean != null){
+                    // TODO: 15/11/3 Insert by calendar id.
+                    CalendarProvider.getStaticInstance(TaskActivity.this).insertTask(taskBean, 1);
+                }
             }
         });
 
@@ -60,8 +68,32 @@ public class TaskActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         findViewById(R.id.id_edit_start).setOnClickListener(new DatePickerTrigger(dateStart, PICK_START));
         findViewById(R.id.id_edit_end).setOnClickListener(new DatePickerTrigger(dateEnd, PICK_END));
-        ((Spinner) findViewById(R.id.id_edit_repetition)).setAdapter(new DropdownAdapter(this, android.R.layout.simple_spinner_item).setWhich(SPINNER_REPEAT));
-        ((Spinner) findViewById(R.id.id_edit_reminder)).setAdapter(new DropdownAdapter(this, android.R.layout.simple_spinner_item).setWhich(SPINNER_REMINDER));
+        repetition = ((Spinner) findViewById(R.id.id_edit_repetition));
+        repetition.setAdapter(new DropdownAdapter(this, android.R.layout.simple_spinner_item).setWhich(SPINNER_REPEAT));
+        reminder = ((Spinner) findViewById(R.id.id_edit_reminder));
+        reminder.setAdapter(new DropdownAdapter(this, android.R.layout.simple_spinner_item).setWhich(SPINNER_REMINDER));
+        title = (EditText) findViewById(R.id.id_task_title_text);
+        description = (EditText) findViewById(R.id.id_edit_description);
+    }
+
+    private TaskBean genTask(){
+        String titleText = title.getText().toString();
+        if (titleText == null || "".equalsIgnoreCase(titleText.trim())){
+            Snackbar.make(title, "Title can not be empty!", Snackbar.LENGTH_SHORT).show();
+            return null;
+        }
+
+        if (dateStart == null || dateEnd == null){
+            Snackbar.make(title, "Please select start date & end date", Snackbar.LENGTH_SHORT).show();
+            return null;
+        }
+        TaskBean task = new TaskBean();
+        task.setTitle(title.getText().toString());
+        task.setStartDate(TimeStampUtil.toUnixTimeStamp(dateStart));
+        task.setEndDate(TimeStampUtil.toUnixTimeStamp(dateEnd));
+        task.setDescription(description.getText().toString());
+        RecurrenceUtil.populateRRule(task, repetition.getSelectedItemPosition());
+        return task;
     }
 
     public class DatePickerTrigger implements View.OnClickListener{
@@ -90,11 +122,13 @@ public class TaskActivity extends AppCompatActivity {
                                                  .setText(new StringBuilder().append("").append(year).append("-").append(monthOfYear + 1).append("-").append(dayOfMonth).toString());
                                          ((TextView) findViewById(R.id.id_edit_start_time))
                                                  .setText(new StringBuilder().append("").append(hourString).append(":").append(minute).toString());
+                                         TaskActivity.this.dateStart = dateData;
                                      } else {
                                          ((TextView) findViewById(R.id.id_edit_end_date))
                                                  .setText(new StringBuilder().append("").append(year).append("-").append(monthOfYear + 1).append("-").append(dayOfMonth).toString());
                                          ((TextView) findViewById(R.id.id_edit_end_time))
                                                  .setText(new StringBuilder().append("").append(hourString).append(":").append(minute).toString());
+                                         TaskActivity.this.dateEnd = dateData;
                                      }
                                  }
                             }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true)
