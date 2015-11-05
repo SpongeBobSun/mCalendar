@@ -23,6 +23,7 @@ import sun.bob.mcalendar.adapters.DropdownAdapter;
 import sun.bob.mcalendar.beans.TaskBean;
 import sun.bob.mcalendar.constants.Constants;
 import sun.bob.mcalendar.content.CalendarProvider;
+import sun.bob.mcalendar.content.CalendarResolver;
 import sun.bob.mcalendar.utils.RecurrenceUtil;
 import sun.bob.mcalendar.utils.TimeStampUtil;
 import sun.bob.mcalendarview.utils.CurrentCalendar;
@@ -38,6 +39,9 @@ public class TaskActivity extends AppCompatActivity {
     public DateData dateStart, dateEnd;
     private EditText title, description;
     private Spinner repetition, reminder;
+    long taskId;
+    boolean edit;
+    TaskBean taskBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,20 +55,27 @@ public class TaskActivity extends AppCompatActivity {
         month = getIntent().getIntExtra("month", 0);
         day = getIntent().getIntExtra("day", 0);
 
+        edit = getIntent().getBooleanExtra("edit", false);
+        taskId = getIntent().getLongExtra("taskId", -1);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 TaskBean taskBean = genTask();
-                if (taskBean != null){
-                    // TODO: 15/11/3 Insert by calendar id.
-                    long eventId = CalendarProvider.getStaticInstance(TaskActivity.this).insertTask(taskBean, 1);
-                    int reminderSpinnerPos = reminder.getSelectedItemPosition();
-                    if ( reminderSpinnerPos != 0){
-                        CalendarProvider.getStaticInstance(TaskActivity.this).insertReminderForTask(eventId, Constants.REMINDER_VALUE[reminderSpinnerPos], CalendarContract.Reminders.METHOD_DEFAULT);
+                if (!edit){
+                    if (taskBean != null){
+                        // TODO: 15/11/3 Insert by calendar id.
+                        taskId = CalendarProvider.getStaticInstance(TaskActivity.this).insertTask(taskBean, 1);
                     }
-                    TaskActivity.this.finish();
+                } else {
+                    CalendarProvider.getStaticInstance(TaskActivity.this).updateTask(taskId, taskBean);
                 }
+                int reminderSpinnerPos = reminder.getSelectedItemPosition();
+                if ( reminderSpinnerPos != 0){
+                    CalendarProvider.getStaticInstance(TaskActivity.this).insertReminderForTask(taskId, Constants.REMINDER_VALUE[reminderSpinnerPos], CalendarContract.Reminders.METHOD_DEFAULT);
+                }
+                TaskActivity.this.finish();
             }
         });
 
@@ -81,6 +92,24 @@ public class TaskActivity extends AppCompatActivity {
         reminder.setAdapter(new DropdownAdapter(this, android.R.layout.simple_spinner_item).setWhich(SPINNER_REMINDER));
         title = (EditText) findViewById(R.id.id_task_title_text);
         description = (EditText) findViewById(R.id.id_edit_description);
+
+        if (edit){
+            taskBean = CalendarResolver.getStaticInstance(this).getTaskById(taskId);
+            if (taskBean == null)
+                return;
+            title.setText(taskBean.getTitle());
+            description.setText(taskBean.getDescription());
+            dateStart = taskBean.getStartDate();
+            ((TextView) findViewById(R.id.id_edit_start_date)).setText(dateStart.getYear() + "-" + dateStart.getMonthString() + "-" + dateStart.getDayString());
+            ((TextView) findViewById(R.id.id_edit_start_time)).setText(dateStart.getHourString()+":"+dateStart.getMinuteString());
+            dateEnd = taskBean.getEndDate();
+            if (dateEnd == null){
+                dateEnd = dateStart;
+            }
+            ((TextView) findViewById(R.id.id_edit_end_date)).setText(dateEnd.getYear() +"-" + dateEnd.getMonthString() + "-" + dateEnd.getDayString());
+            ((TextView) findViewById(R.id.id_edit_end_time)).setText(dateEnd.getHourString()+":"+dateEnd.getMinuteString());
+
+        }
     }
 
     private TaskBean genTask(){

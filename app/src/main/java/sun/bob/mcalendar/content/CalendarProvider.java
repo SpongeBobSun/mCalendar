@@ -69,4 +69,19 @@ public class CalendarProvider {
         contentResolver.insert(CalendarContract.Reminders.CONTENT_URI, values);
     }
 
+    public void updateTask(long taskId, TaskBean taskBean){
+        ContentValues values = new ContentValues();
+        values.put(CalendarContract.Events.TITLE, taskBean.getTitle());
+        values.put(CalendarContract.Events.ALL_DAY, taskBean.getAllDay());
+        values.put(CalendarContract.Events.DTSTART, taskBean.getStartDateLong());
+        values.put(CalendarContract.Events.DTEND, taskBean.getEndDateLong());
+        values.put(CalendarContract.Events.DESCRIPTION, taskBean.getDescription());
+        values.put(CalendarContract.Events.RRULE, taskBean.getrRule());
+        values.put(CalendarContract.Events.RDATE, taskBean.getrDate());
+        values.put(CalendarContract.Events.EXDATE, taskBean.getExDate());
+        values.put(CalendarContract.Events.EXRULE, taskBean.getExRule());
+
+        contentResolver.update(CalendarContract.Events.CONTENT_URI, values, CalendarContract.Events._ID + "=?", new String[]{"" + taskId});
+    }
+
 }

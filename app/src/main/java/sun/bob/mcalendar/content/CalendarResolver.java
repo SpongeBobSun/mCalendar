@@ -45,7 +45,7 @@ public class CalendarResolver {
     public static final Uri EVENTS_URI = Uri.parse("content://com.android.calendar/events");
 
     ContentResolver contentResolver;
-    Set<String> calendars = new HashSet<String>();
+    Set<String> accounts = new HashSet<String>();
     private ArrayList<TaskBean> allTasks;
 
     private static CalendarResolver staticInstance;
@@ -78,13 +78,13 @@ public class CalendarResolver {
                     String color = cursor.getString(cursor.getColumnIndex(
                             CalendarContract.Calendars.CALENDAR_COLOR));
                     Boolean selected = !cursor.getString(3).equals("0");
-                    calendars.add(displayName);
+                    accounts.add(displayName);
                 }
             }
         } catch (AssertionError ex) {
             // TODO: log exception and bail
         }
-        return calendars;
+        return accounts;
     }
 
     public ArrayList<TaskBean> getAllEvents(){
@@ -222,6 +222,22 @@ public class CalendarResolver {
                 toAdd = new ArrayList<>();
                 toAdd.add(task);
                 last = task;
+            }
+        }
+        return ret;
+    }
+
+
+    public TaskBean getTaskById(long id){
+        TaskBean ret = null;
+        Cursor cursor = contentResolver.query(EVENTS_URI,
+                EVENTS_FIELDS,
+                new StringBuilder().append(CalendarContract.Events._ID).append("=?").toString(),
+                new String[]{"" + id},
+                null);
+        if (cursor.getCount() > 0){
+            while (cursor.moveToNext()){
+                ret = new TaskBean().populate(cursor);
             }
         }
         return ret;

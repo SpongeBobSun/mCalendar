@@ -1,7 +1,9 @@
 package sun.bob.mcalendar.adapters;
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -10,8 +12,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import sun.bob.mcalendar.R;
+import sun.bob.mcalendar.activities.TaskActivity;
 import sun.bob.mcalendar.beans.TaskBean;
 import sun.bob.mcalendar.constants.Constants;
+import sun.bob.mcalendarview.utils.CurrentCalendar;
 
 /**
  * Created by bob.sun on 15/11/2.
@@ -36,6 +40,7 @@ public class DayCardViewHolder extends RecyclerView.ViewHolder {
             ((TextView) toAdd.findViewById(R.id.id_task_card_start)).setText(new StringBuilder().append(task.getStartDate().getHourString()).append(":").append(task.getStartDate().getMinuteString()).toString());
             ((TextView) toAdd.findViewById(R.id.id_task_card_end)).setText(new StringBuilder().append(task.getEndDate().getHourString()).append(":").append(task.getEndDate().getMinuteString()).toString());
             toAdd.setOnClickListener(new OnTaskClickedListener(task.getId()));
+            toAdd.setOnLongClickListener(new OnTaskLongClickedListenner(task.getId()));
             container.addView(toAdd);
         }
         day.setText(tasks.get(0).getStartDate().getDayString());
@@ -51,7 +56,27 @@ public class DayCardViewHolder extends RecyclerView.ViewHolder {
 
         @Override
         public void onClick(View v) {
-            Snackbar.make(v, "Event Id: " + id, Snackbar.LENGTH_LONG).show();
+            Intent newTaskIntent = new Intent(v.getContext(), TaskActivity.class);
+            newTaskIntent.putExtra("year", CurrentCalendar.getCurrentDateData().getYear());
+            newTaskIntent.putExtra("month", CurrentCalendar.getCurrentDateData().getMonth());
+            newTaskIntent.putExtra("day", CurrentCalendar.getCurrentDateData().getDay());
+            newTaskIntent.putExtra("taskId", Long.parseLong(id));
+            newTaskIntent.putExtra("edit", true);
+            v.getContext().startActivity(newTaskIntent);
+//            Snackbar.make(v, "Event Id: " + id, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    class OnTaskLongClickedListenner implements View.OnLongClickListener{
+        String id;
+        public OnTaskLongClickedListenner(String id){
+            this.id = id;
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+
+            return false;
         }
     }
 }

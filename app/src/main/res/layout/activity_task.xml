@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:id="@+id/id_task_title_text"
-                android:text="Task Title"
+                android:hint="Task Title"
                 android:background="@null"
                 android:textSize="20dp"
                 android:layout_margin="16dp"
