@@ -61,10 +61,10 @@ public class CalendarProvider {
         return ret;
     }
 
-    public void insertReminderForTask(long eventId, int mintus, String method) {
+    public void insertReminderForTask(long eventId, int minutes, int method) {
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Reminders.EVENT_ID, eventId);
-        values.put(CalendarContract.Reminders.MINUTES, mintus);
+        values.put(CalendarContract.Reminders.MINUTES, minutes);
         values.put(CalendarContract.Reminders.METHOD, method);
         contentResolver.insert(CalendarContract.Reminders.CONTENT_URI, values);
     }

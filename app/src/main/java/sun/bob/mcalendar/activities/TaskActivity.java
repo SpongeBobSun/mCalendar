@@ -1,6 +1,7 @@
 package sun.bob.mcalendar.activities;
 
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import java.util.Calendar;
 import sun.bob.mcalendar.R;
 import sun.bob.mcalendar.adapters.DropdownAdapter;
 import sun.bob.mcalendar.beans.TaskBean;
+import sun.bob.mcalendar.constants.Constants;
 import sun.bob.mcalendar.content.CalendarProvider;
 import sun.bob.mcalendar.utils.RecurrenceUtil;
 import sun.bob.mcalendar.utils.TimeStampUtil;
@@ -56,7 +58,12 @@ public class TaskActivity extends AppCompatActivity {
                 TaskBean taskBean = genTask();
                 if (taskBean != null){
                     // TODO: 15/11/3 Insert by calendar id.
-                    CalendarProvider.getStaticInstance(TaskActivity.this).insertTask(taskBean, 1);
+                    long eventId = CalendarProvider.getStaticInstance(TaskActivity.this).insertTask(taskBean, 1);
+                    int reminderSpinnerPos = reminder.getSelectedItemPosition();
+                    if ( reminderSpinnerPos != 0){
+                        CalendarProvider.getStaticInstance(TaskActivity.this).insertReminderForTask(eventId, Constants.REMINDER_VALUE[reminderSpinnerPos], CalendarContract.Reminders.METHOD_DEFAULT);
+                    }
+                    TaskActivity.this.finish();
                 }
             }
         });

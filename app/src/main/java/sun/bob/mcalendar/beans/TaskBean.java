@@ -156,6 +156,6 @@ public class TaskBean implements Comparable {
 
     @Override
     public int compareTo(Object another) {
-        return (int) (Long.parseLong(this.startDate) - Long.parseLong(((TaskBean) another).startDate));
+        return (int) (Long.parseLong(this.startDate) / 1000 - Long.parseLong(((TaskBean) another).startDate) / 1000);
     }
 }

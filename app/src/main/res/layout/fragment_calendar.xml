@@ -19,5 +19,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
         android:id="@+id/id_calendar_task"
+        android:layout_marginTop="10dp"
         />
 </LinearLayout>

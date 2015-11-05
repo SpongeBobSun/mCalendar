@@ -18,7 +18,8 @@ public class Constants {
     public static final int RRULE_YEARLY = 4;
 
 
-    public static final List REMINDER_LIST = Arrays.asList(new String[]{"10 min before", "30 min before", "1 hour before", "3 hour before"});
+    public static final List REMINDER_LIST = Arrays.asList(new String[]{"None", "10 min before", "30 min before", "1 hour before", "3 hour before"});
+    public static final int[] REMINDER_VALUE = new int[]{0, 10, 30, 60, 180};
 
     public static final int MONTH_TEXT[] = {-1, R.string.Jan, R.string.Feb, R.string.Mar, R.string.Apr, R.string.May, R.string.Jun, R.string.Jul, R.string.Aug, R.string.Sep, R.string.Oct, R.string.Nov, R.string.Dec};
 }
