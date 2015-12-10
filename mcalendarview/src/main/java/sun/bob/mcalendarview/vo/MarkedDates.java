@@ -1,11 +1,12 @@
 package sun.bob.mcalendarview.vo;
 
 import java.util.ArrayList;
+import java.util.Observable;
 
 /**
  * Created by bob.sun on 15/8/28.
  */
-public class MarkedDates {
+public class MarkedDates extends Observable {
     private static MarkedDates staticInstance;
     private ArrayList<DateData> data;
 
@@ -20,15 +21,18 @@ public class MarkedDates {
     }
 
     public boolean check(DateData date){
+        this.setChanged();
         return data.contains(date);
     }
 
     public boolean remove(DateData date){
+        this.setChanged();
         return data.remove(date);
     }
 
     public MarkedDates add(DateData dateData){
         data.add(dateData);
+        this.setChanged();
         return this;
     }
 
@@ -38,6 +42,7 @@ public class MarkedDates {
 
     public MarkedDates removeAll(){
         data.clear();
+        this.setChanged();
         return this;
     }
 }

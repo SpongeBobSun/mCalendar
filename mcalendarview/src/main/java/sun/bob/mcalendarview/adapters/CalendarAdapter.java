@@ -14,6 +14,8 @@ import android.widget.Toast;
 import java.io.CharArrayReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import sun.bob.mcalendarview.MarkStyle;
 import sun.bob.mcalendarview.listeners.OnDateClickListener;
@@ -29,7 +31,7 @@ import sun.bob.mcalendarview.vo.MarkedDates;
 /**
  * Created by bob.sun on 15/8/27.
  */
-public class CalendarAdapter extends ArrayAdapter {
+public class CalendarAdapter extends ArrayAdapter implements Observer {
     private ArrayList data;
     private int cellView = -1;
     private int markView = -1;
@@ -80,5 +82,10 @@ public class CalendarAdapter extends ArrayAdapter {
     @Override
     public int getCount(){
         return data.size();
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        this.notifyDataSetChanged();
     }
 }
